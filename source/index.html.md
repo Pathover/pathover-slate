@@ -1,11 +1,9 @@
 ---
-title: API Reference
+title: Pathover API Reference
 
 language_tabs:
-  - shell
-  - ruby
-  - python
-  - javascript
+  - cURL
+  - Node.js
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -19,11 +17,19 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+## About Pathover API
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Welcome to the Pathover API. You can use our API to access Pathover API endpoints, which can be used to submit orders and also create, read, update and delete the data related to your store.
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+We have language bindings in cURL and Node.js. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+
+## Requirement
+
+We follow RESTful principles and make use of standard HTTP methods like GET and POST. To get access to Pathover API, please make sure you satisfy the following requirements:
+
+* You must access the API over **HTTPS** protocol
+
+* POST data should be encoded as standard **application/x-www-form-urlencoded**
 
 # Authentication
 
@@ -186,4 +192,3 @@ This endpoint retrieves a specific kitten.
 Parameter | Description
 --------- | -----------
 ID | The ID of the kitten to retrieve
-
