@@ -111,6 +111,205 @@ name | string | The name of user.
 email | string | The email of user.
 active | boolean | Whether the user is active.
 
+## Create a Locations
+
+```shell
+curl -X POST https://localhost:8888/api/v1/locations/create \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d '{
+      "apikey": "YOUR_API_KEY",
+      "name": "Pathover, Inc.",
+      "active": true,
+      "default_location": false,
+      "phone": "3012840610",
+      "email": "support@pathover.com",
+      "default_pickup_waiting_time": 60,
+      "default_rush_waiting_time": 60,
+      "address": {
+          "city": "Sunnyvale",
+          "address1": "440 North Wolfe Road",
+          "address2": "",
+          "state": "CA",
+          "postal_code": "94085-3869",
+          "country_code": "US"
+      }
+    }'
+```
+
+```javascript
+var request = require('request');
+
+// allow SSL to work
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var data = {
+  form: {
+    apikey: 'YOUR_API_KEY',
+    name: 'Pathover, Inc.',
+    active: true,
+    default_location: false,
+    phone: '3012840610',
+    email: 'support@pathover.com',
+    default_pickup_waiting_time: 60,
+    default_rush_waiting_time: 60,
+    address: JSON.stringify({
+        city: 'Sunnyvale',
+        address1: '440 North Wolfe Road',
+        address2: '',
+        state: 'CA',
+        postal_code: '94085-3869',
+        country_code: 'US'
+    })
+  }
+};
+
+request.post('https://app.pathover.com/api/v1/locations/create', data, function(err, res, body) {
+  console.log(body);
+});
+
+```
+
+> The above command returns JSON response like this:
+
+```json
+{
+    "message": "New location added.",
+    "location": {
+        "phone": "+13012840610",
+        "address": {
+            "city": "SUNNYVALE",
+            "address1": "440 N WOLFE RD",
+            "address2": "",
+            "state": "CA",
+            "postal_code": "94085-3869",
+            "country_code": "US"
+        },
+        "active": true,
+        "id": 6,
+        "name": "Pathover, Inc.",
+        "timezone_id": 147,
+        "default_pickup_waiting_time": "60",
+        "company_id": 7,
+        "email": "support@pathover.com",
+        "geocode": {
+            "lat": 37.3839198,
+            "lng": -122.0128444
+        },
+        "default_rush_waiting_time": "60"
+    },
+    "success": true
+}
+```
+
+This endpoint helps you to create a store locations.
+
+To create a new store location, you'll make a POST with the following arguments:
+
+### HTTP Request
+
+`POST https://app.pathover.com/api/v1/locations/create`
+
+### Query Arguments
+
+Arguments | Type | Description
+--------- | ------- | -----------
+apikey | string | (**Required**) Your api key.
+name | string | (**Required**) The name of store location
+address | [address object](#address) | (**Required**) The address of the store location.
+active | boolean | (**Required**) Whether store location is active. Default to `true`.
+default_location | boolean | (**Required**) Whether the store location is the flag ship store.
+phone | string | (**Required**) The phone number to reach the store location.
+email | string | (**Required**) The email to reach the store location.
+default_pickup_waiting_time | integer | (**Required**) The default wait time in minute for a pickup order to be ready for pickup. Default to `60`.
+default_rush_waiting_time | integer | (**Required**) The default wait time in minute for an on-demand delivery to be ready for pickup. Default to `60`.
+
+## Retrieve a Location
+
+```shell
+curl https://app.pathover.com/api/v1/locations/read \
+  -d '{
+      "apikey": "YOUR_API_KEY",
+      "id": 6
+    }'
+```
+
+```javascript
+var request = require('request');
+
+// allow SSL to work
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var data = {
+  form: {
+    apikey: 'YOUR_API_KEY',
+    id: 6
+  }
+};
+
+request.get('https://app.pathover.com/api/v1/locations/read', data, function(err, res, body) {
+  console.log(body);
+});
+
+```
+
+> The above command returns JSON response like this:
+
+```json
+{
+    "location": {
+        "actual_rush_waiting_time": 60,
+        "actual_pickup_waiting_time": 60,
+        "notification_list": null,
+        "default_courier_id": null,
+        "tax": 0,
+        "updated_at": "2016/11/30 02:56:41",
+        "total_products": 0,
+        "location_users": [],
+        "id": 6,
+        "store_location_constraints": null,
+        "default_pickup_waiting_time": 60,
+        "company_id": 7,
+        "geocode": {
+            "lat": 37.3839198,
+            "lng": -122.0128444
+        },
+        "default_rush_waiting_time": 60,
+        "pickup_option_name": null,
+        "phone": "+13012840610",
+        "address": {
+            "city": "SUNNYVALE",
+            "address1": "440 N WOLFE RD",
+            "address2": "",
+            "state": "CA",
+            "postal_code": "94085-3869",
+            "country_code": "US"
+        },
+        "active": true,
+        "name": "Pathover, Inc.",
+        "default_driver_id": null,
+        "timezone_id": 147,
+        "created_at": "2016/11/30 02:56:41",
+        "do_not_disturb": false,
+        "email": "support@pathover.com",
+        "default_location": false
+    },
+    "success": true
+}
+```
+
+This endpoint lets you to retrieve a specific store location by `id`.
+
+### HTTP Request
+
+`GET https://app.pathover.com/api/v1/locations/read`
+
+### Query Arguments
+
+Arguments | Type | Description
+--------- | ------- | -----------
+apikey | string | (**Required**) Your api key.
+id | integer | (**Required**) The unique id number of the store location.
+
 ## Get All Locations
 
 ```shell
@@ -119,8 +318,21 @@ curl https://app.pathover.com/api/v1/locations/query \
 ```
 
 ```javascript
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+var request = require('request');
+
+// allow SSL to work
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var data = {
+  form: {
+    apikey: 'YOUR_API_KEY'
+  }
+};
+
+request.get('https://app.pathover.com/api/v1/locations/query', data, function(err, res, body) {
+  console.log(body);
+});
+
 ```
 
 > The above command returns JSON response like this:
@@ -229,23 +441,23 @@ curl "http://example.com/api/kittens"
             "last_billing_date": "2016/11/18 23:41:20"
         },
         "pickup_option_name": null,
-        "phone": "+12133991633",
+        "phone": "+13012840610",
         "address": {
-            "city": "CUPERTINO",
-            "address1": "10122 BANDLEY DR",
+            "city": "Sunnyvale",
+            "address1": "440 North Wolfe Road",
             "address2": "",
             "state": "CA",
-            "postal_code": "95014-2181",
+            "postal_code": "94085-3869",
             "country_code": "US"
         },
         "active": true,
-        "name": "Marina Food - Cupertino",
+        "name": "Pathover, Inc.",
         "default_driver_id": null,
         "timezone_id": 147,
         "created_at": "2016/11/18 00:18:13",
         "do_not_disturb": false,
         "lead_time_mins": 30,
-        "email": "chunhao@pathover.com",
+        "email": "support@pathover.com",
         "default_location": true
     }],
     "success": true,
@@ -263,8 +475,11 @@ This endpoint retrieves all store locations.
 
 Parameter | Type | Description
 --------- | ------- | -----------
+apikey | string | (**Required**) Your api key.
 active | boolean |(**Optional**) Limit result set to whether locations is active.
 limit | integer | (**Optional**) Maximum number of items to be returned in result set. Default is 10.
+page | integer | (**Optional**) Current page of the result set.
+sort | string | (**Optional**) Sort result set by location attribute. Default to `id`. Options: `id`, `name`, `address`, `active`, `created_at` and `updated_at`.
 
 # Timezones
 
