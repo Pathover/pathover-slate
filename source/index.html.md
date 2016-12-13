@@ -15,7 +15,7 @@ includes:
 search: true
 ---
 
-# Introduction
+# Introduction Pathover API v1.x
 
 ## About Pathover API
 
@@ -743,18 +743,18 @@ email | string | (**Required**) The email address of the customer.
 
 ### Order properties
 
-<aside class="notice">
-If there is any special instruction or note along with the order, please specify in <b>metadata</b>.
-<br />
-<br />
-For example: <i>"metadata": { "note": "Here goes the note from customer" }</i>
-</aside>
-
 Attribute | Type | Description
 --------- | ------- | -----------
 order_no | string | (**Required**) The order number of this order, specify from your own system.
 line_items | [line item](#line-item-properties) array | (**Required**) The list of products purchased in this order.
 metadata | json object | (Optional) Any extra information for the order.
+
+<aside class="notice">
+If there is any special instruction or note along with the order, please specify in <b>metadata</b>.
+<br />
+<br />
+For example: <i>"metadata": { "note": "This is where you place the notes from the customer. ex. 'Please do not pick brown bananas.'" }</i>
+</aside>
 
 ### Line Item properties
 
