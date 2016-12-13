@@ -6,8 +6,8 @@ language_tabs:
   - javascript: Node.js
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='http://pathover.com/'>Return to Pathover.com</a>
+  - <a href='mailto:support@pathover.com'>Contact Us</a>
 
 includes:
   - errors
@@ -35,7 +35,7 @@ We follow RESTful principles and make use of standard HTTP methods like GET and 
 
 * Make sure to specify API version in the endpoints, the current version is `/v1`
 
-## About Timestamp
+## About Datetime
 
 > An example of a timestamp format:
 
@@ -43,7 +43,7 @@ We follow RESTful principles and make use of standard HTTP methods like GET and 
 2016/11/18 00:18:12
 ```
 
-Times are formatted only in **UTC time**, please remember to convert your local time to UTC before sending request.
+All Datetimes from Pathover API are formatted only in **UTC time**, you might want to convert to your local time before further use.
 
 # Authentication
 
@@ -56,6 +56,158 @@ Pathover expects for the API key to be included in all API requests to the serve
 <aside class="notice">
 You must replace <code>YOUR_API_KEY</code> with your API key.
 </aside>
+
+# Resouces
+
+## Timezones
+
+The timezone object contains the informations regarding a specific time zone.
+
+### Timezone properties
+
+> An example of a timezone object:
+
+```json
+{
+    "utc_offset": -480,
+    "name": "America/Los_Angeles",
+    "created_at": "2016/11/18 00:18:12",
+    "updated_at": "2016/11/18 21:30:01",
+    "identifier": "PST",
+    "id": 147
+}
+```
+
+Attribute | Type | Description
+--------- | ------- | -----------
+utc_offset | integer | The time difference between UTC time, measured in minutes.
+name | string | The name of timezone, as defined in [tz database](https://en.wikipedia.org/wiki/Tz_database).
+created_at | datetime | The timestamp when timezone was created.
+updated_at | datetime | The timestamp when timezone was last modified.
+identifier | string | The abbreviation of timezone.
+id | integer | The unique id number of the timezone.
+
+## Geocode
+
+The geocode object contains latitude and longitude.
+
+### Geocode properties
+
+> An example of a geocode object:
+
+```json
+{
+    "lat": 37.3246063,
+    "lng": -122.0338235
+}
+```
+
+Attribute | Type | Description
+--------- | ------- | -----------
+lat | float | The latitude of the given location.
+lng | float | The longitude of the given location.
+
+## Address
+
+The address object contains detailed address of a location.
+
+### Address properties
+
+> An example of a address object:
+
+```json
+{
+    "city": "Sunnyvale",
+    "address1": "440 N Wolfe Rd",
+    "address2": "",
+    "state": "CA",
+    "postal_code": "94085-3869",
+    "country_code": "US"
+}
+```
+
+Attribute | Type | Description
+--------- | ------- | -----------
+city | string | The city of the location.
+address1 | string | The address line one of the location.
+address2 | string | The address line two of the location.
+state | string | The state of the location in two letter abbreviation.
+postal_code | string | The postal code of the location.
+country_code | string | The country code of the location, in [ISO Alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
+
+## Location Constraints
+
+The location constraints object contains the general informations regarding a store location.
+
+### Location Constraints properties
+
+> An example of a location constraints object:
+
+```json
+{
+    "maintains_inventory": false,
+    "store_id": 2,
+    "created_at": "2016/11/18 00:20:47",
+    "batch_times": [{
+        "days": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ],
+        "time": "19:00:00"
+    }, {
+        "days": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "monday"
+        ],
+        "time": "01:30:00"
+    }, {
+        "days": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "monday"
+        ],
+        "time": "02:00:00"
+    }],
+    "updated_at": "2016/11/22 01:36:08",
+    "store_hours": null,
+    "stock_warning_threshold": null,
+    "capacity": null,
+    "location_id": 1,
+    "id": 1
+}
+```
+
+Attribute | Type | Description
+--------- | ------- | -----------
+maintains_inventory | boolean | Whether or not the store maintains inventory
+store_id | integer | The unique id number of the store.
+created_at | datetime | The timestamp when location constraints was created.
+updated_at | datetime | The timestamp when location constraints was last modified.
+batch_times | array | A list of batch time for a store location. See [Batch Time properties](#batch-time-properties).
+stock_warning_threshold | integer | The number that when remaining stock reaches this threshold, users associated with the location will be notified.
+location_id | integer | The unique id number of the location.
+id | integer | The unique id number of the location constraints.
+
+### Batch Time properties
+
+Attribute | Type | Description
+--------- | ------- | -----------
+days | string array | A list of days of the week which the store location would like to batch orders. Available values are **sunday**, **monday**, **tuesday**, **wednesday**, **thursday**, **friday** and **saturday**.
+time | string | The **UTC time** string of the batch time, in 24-hour clock.
 
 # Locations
 
@@ -71,7 +223,6 @@ default_rush_waiting_time | integer | The default wait time in minute for an on-
 default_pickup_waiting_time | integer | The default wait time in minute for a pickup order to be ready for pickup, used to reset `actual_pickup_waiting_time`.
 notification_list | array | An extra list of phone numbers and emails to get notification when new order comes in or batch time happens, this list will be cleared every midnight at local time. See [Notification List properties](#notification-list-properties).
 default_courier_id | integer | The id of default courier, if specified.
-default_courier | courier | **TODO:** are they going to see this?
 tax | float | The tax rate of store location.
 created_at | datetime | The timestamp when store location was created.
 updated_at | datetime | The timestamp when store location was last modified.
@@ -89,7 +240,6 @@ address | [address object](#address) | The address of the store location.
 active | boolean | Whether store location is active.
 name | string | The name of store location.
 default_driver_id | integer | The id of default driver, if specified.
-do_not_disturb | boolean | Whether the store location would like to stop receiving order temporarily. **TODO:** are we showing this?
 lead_time_mins | integer | The lead time in minutes until couriers come to store.
 email | string | The email to reach the store location.
 default_location | boolean | Whether the store location is the flag ship store.
@@ -114,7 +264,7 @@ active | boolean | Whether the user is active.
 ## Create a Locations
 
 ```shell
-curl -X POST https://localhost:8888/api/v1/locations/create \
+curl -X POST https://app.pathover.com/api/v1/locations/create \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d '{
       "apikey": "YOUR_API_KEY",
@@ -138,9 +288,6 @@ curl -X POST https://localhost:8888/api/v1/locations/create \
 
 ```javascript
 var request = require('request');
-
-// allow SSL to work
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var data = {
   form: {
@@ -205,7 +352,7 @@ This endpoint helps you to create a store locations.
 
 To create a new store location, you'll make a POST with the following arguments:
 
-### HTTP Request
+### HTTPS Request
 
 `POST https://app.pathover.com/api/v1/locations/create`
 
@@ -235,9 +382,6 @@ curl https://app.pathover.com/api/v1/locations/read \
 
 ```javascript
 var request = require('request');
-
-// allow SSL to work
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var data = {
   form: {
@@ -299,7 +443,7 @@ request.get('https://app.pathover.com/api/v1/locations/read', data, function(err
 
 This endpoint lets you to retrieve a specific store location by `id`.
 
-### HTTP Request
+### HTTPS Request
 
 `GET https://app.pathover.com/api/v1/locations/read`
 
@@ -319,9 +463,6 @@ curl https://app.pathover.com/api/v1/locations/query \
 
 ```javascript
 var request = require('request');
-
-// allow SSL to work
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var data = {
   form: {
@@ -467,7 +608,7 @@ request.get('https://app.pathover.com/api/v1/locations/query', data, function(er
 
 This endpoint retrieves all store locations.
 
-### HTTP Request
+### HTTPS Request
 
 `GET https://app.pathover.com/api/v1/locations/query`
 
@@ -476,163 +617,169 @@ This endpoint retrieves all store locations.
 Parameter | Type | Description
 --------- | ------- | -----------
 apikey | string | (**Required**) Your api key.
-active | boolean |(**Optional**) Limit result set to whether locations is active.
-limit | integer | (**Optional**) Maximum number of items to be returned in result set. Default is 10.
-page | integer | (**Optional**) Current page of the result set.
-sort | string | (**Optional**) Sort result set by location attribute. Default to `id`. Options: `id`, `name`, `address`, `active`, `created_at` and `updated_at`.
+active | boolean |(Optional) Limit result set to whether locations is active.
+limit | integer | (Optional) Maximum number of items to be returned in result set. Default to 10.
+page | integer | (Optional) Current page of the result set.
+sort | string | (Optional) Sort result set by location attribute. Default to `id`. Options: `id`, `name`, `address`, `active`, `created_at` and `updated_at`.
 
-# Timezones
+# Orders
 
-The timezone object contains the informations regarding a specific time zone.
+Order is an object that represents the order from your customers.
 
-## Timezone properties
+## Submit an Order
 
-> An example of a timezone object:
+```shell
+curl -X POST https://app.pathover.com/api/v1/submitorder \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d '{
+      "apikey": "YOUR_API_KEY",
+      "customer": {
+        "name": "John Doe",
+        "phone": "3012840610",
+        "email": "support@pathover.com"
+      },
+      "address": {
+        "address1": "440 N Wolfe Rd",
+        "address2": "",
+        "city": "Sunnyvale",
+        "state": "CA",
+        "postal_code": "94085",
+        "country_code": "US"
+      },
+      "order": {
+        "order_no": "000",
+        "line_items": [{
+          "name": "Banana",
+          "sku": "800",
+          "qty": 2
+        }, {
+          "name": "Apple",
+          "sku": "999",
+          "qty": 1
+        }],
+        "metadata": { "note": "I do not want bananas with brown spot PLEASE" }
+      },
+      "delivery_type": "scheduled"
+    }'
+```
+
+```javascript
+var request = require('request');
+
+var data = {
+  form: {
+    apikey: 'YOUR_API_KEY',
+    customer: JSON.stringify({
+      "name": "John Doe",
+      "phone": "3012840610",
+      "email": "support@pathover.com"
+    }),
+    address: JSON.stringify({
+      "address1": "440 N Wolfe Rd",
+      "address2": "",
+      "city": "Sunnyvale",
+      "state": "CA",
+      "postal_code": "94085",
+      "country_code": "US"
+    }),
+    order: JSON.stringify({
+      "order_no": "000",
+      "line_items": [{
+        "name": "Banana",
+        "sku": "800",
+        "qty": 2
+      }, {
+        "name": "Apple",
+        "sku": "999",
+        "qty": 1
+      }],
+      "metadata": { "note": "I do not want bananas with brown spot PLEASE" }
+    }),
+    delivery_type: 'scheduled'
+  }
+};
+
+request.post('https://app.pathover.com/api/v1/submitorder', data, function(err, res, body) {
+  console.log(body);
+});
+
+```
+
+> The above command returns JSON response like this:
 
 ```json
 {
-    "utc_offset": -480,
-    "name": "America/Los_Angeles",
-    "created_at": "2016/11/18 00:18:12",
-    "updated_at": "2016/11/18 21:30:01",
-    "identifier": "PST",
-    "id": 147
+    "message": "Order submitted successfully.",
+    "success": true
 }
 ```
 
-Attribute | Type | Description
+This endpoint helps you to submit an order.
+
+To submit a new order, you'll make a POST with the following arguments:
+
+### HTTPS Request
+
+`POST https://app.pathover.com/api/v1/submitorder`
+
+### Query Arguments
+
+Arguments | Type | Description
 --------- | ------- | -----------
-utc_offset | integer | The time difference between UTC time, measured in minutes.
-name | string | The name of timezone, as defined in [tz database](https://en.wikipedia.org/wiki/Tz_database).
-created_at | datetime | The timestamp when timezone was created.
-updated_at | datetime | The timestamp when timezone was last modified.
-identifier | string | The abbreviation of timezone.
-id | integer | The unique id number of the timezone.
+apikey | string | (**Required**) Your api key.
+customer | [customer object](#customer-properties) | (**Required**) The contact information of the customer.
+order | [order object](#order-properties) | (**Required**) The information of the order.
+address | [address object](#order-address-properties) | (Optional) The shipping address of the order. Required if order type is `scheduled` or `shipping`.
+location_id | integer | (Optional) The id of location which you would like to fulfill the order. Required if order type is `pickup`.
+delivery_type | string | (Optional) The delivery type of the order. Default to `scheduled`. Options: `scheduled`, `pickup`, `shipping`.
 
-# Geocode
-
-The geocode object contains latitude and longitude.
-
-## Geocode properties
-
-> An example of a geocode object:
-
-```json
-{
-    "lat": 37.3246063,
-    "lng": -122.0338235
-}
-```
+### Customer properties
 
 Attribute | Type | Description
 --------- | ------- | -----------
-lat | float | The latitude of the given location.
-lng | float | The longitude of the given location.
+name | string | (**Required**) The name of the customer.
+phone | string | (**Required**) The phone number of the customer.
+email | string | (**Required**) The email address of the customer.
 
-# Address
+### Order properties
 
-The address object contains detailed address of a location.
-
-## Address properties
-
-> An example of a address object:
-
-```json
-{
-    "city": "CUPERTINO",
-    "address1": "10122 BANDLEY DR",
-    "address2": "",
-    "state": "CA",
-    "postal_code": "95014-2181",
-    "country_code": "US"
-}
-```
+<aside class="notice">
+If there is any special instruction or note along with the order, please specify in <b>metadata</b>.
+<br />
+<br />
+For example: <i>"metadata": { "note": "Here goes the note from customer" }</i>
+</aside>
 
 Attribute | Type | Description
 --------- | ------- | -----------
-city | string | The city of the location.
-address1 | string | The address line one of the location.
-address2 | string | The address line two of the location.
-state | string | The state of the location in two letter abbreviation.
-postal_code | string | The postal code of the location.
-country_code | string | The country code of the location, in [ISO Alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
+order_no | string | (**Required**) The order number of this order, specify from your own system.
+line_items | [line item](#line-item-properties) array | (**Required**) The list of products purchased in this order.
+metadata | json object | (Optional) Any extra information for the order.
 
-# Location Constraints
-
-The location constraints object contains the general informations regarding a store location.
-
-## Location Constraints properties
-
-> An example of a location constraints object:
-
-```json
-{
-    "maintains_inventory": false,
-    "store_id": 2,
-    "created_at": "2016/11/18 00:20:47",
-    "batch_times": [{
-        "days": [
-            "monday",
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday",
-            "sunday"
-        ],
-        "time": "19:00:00"
-    }, {
-        "days": [
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday",
-            "sunday",
-            "monday"
-        ],
-        "time": "01:30:00"
-    }, {
-        "days": [
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday",
-            "sunday",
-            "monday"
-        ],
-        "time": "02:00:00"
-    }],
-    "updated_at": "2016/11/22 01:36:08",
-    "store_hours": null,
-    "stock_warning_threshold": null,
-    "capacity": null,
-    "location_id": 1,
-    "id": 1
-}
-```
+### Line Item properties
 
 Attribute | Type | Description
 --------- | ------- | -----------
-maintains_inventory | boolean | Whether or not the store maintains inventory
-store_id | integer | The unique id number of the store.
-created_at | datetime | The timestamp when location constraints was created.
-updated_at | datetime | The timestamp when location constraints was last modified.
-batch_times | array | A list of batch time for a store location. See [Batch Time properties](#batch-time-properties).
-store_hours | array | A list of store location hours. See [Store Hours properties](#store-hours-properties).
-stock_warning_threshold | integer | The number that when remaining stock reaches this threshold, users associated with the location will be notified.
-capacity | object | **TODO**
-location_id | integer | The unique id number of the location.
-id | integer | The unique id number of the location constraints.
+name | string | (**Required**) The name of the product.
+sku | string | (**Required**) The id or reference number/string that uniquely identifies the product in your own system.
+qty | integer | (**Required**) The number of this product ordered.
+price | float | (Optional) The unit price of the product.
+upc | string | (Optional) The upc of the product.
+weight | float | (Optional) The weight of the product.
+weight_unit | string | (Optional) The weight unit of the product. Options: `oz`, `fl oz`, `g`, `kg`, `lb`, `lbs`
+image_url | string | (Optional) The url of the product image.
+temperature_control | string | (Optional) Whether this product needs temperature control. Options: `refrigerated`, `frozen`, `none`
 
-### Batch Time properties
+### Order Address properties
 
 Attribute | Type | Description
 --------- | ------- | -----------
-days | string array | A list of days of the week which the store location would like to batch orders. Available values are **monday**, **tuesday**, **wednesday**, **thursday**, **friday**, **saturday** and **sunday**.
-time | string | The **UTC time** string of the batch time, in 24-hour clock.
-
-### Store Hours properties
-
-**TODO**
+city | string | (**Required**) The city of the location.
+address1 | string | (**Required**) The address line one of the location.
+address2 | string | (**Required**) The address line two of the location.
+state | string | (**Required**) The state of the location in two letter abbreviation.
+postal_code | string | (**Required**) The postal code of the location.
+country_code | string | (**Required**) The country code of the location, in [ISO Alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
+lat | float | (Optional) The latitude of the shipping address.
+lng | float | (Optional) The longitude of the shipping address.
+alt | float | (Optional) The altitude of the shipping address.
