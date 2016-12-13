@@ -687,11 +687,23 @@ var data = {
       "line_items": [{
         "name": "Banana",
         "sku": "800",
-        "qty": 2
+        "qty": 2,
+        "price": 0.19,
+        "upc": "57383408",
+        "weight": 4.0,
+        "weight_unit": "oz",
+        "image_url": "https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3.jpg",
+        "temperature_control": "none"
       }, {
         "name": "Apple",
         "sku": "999",
-        "qty": 1
+        "qty": 1,
+        "price": 0.49,
+        "upc": "57383409",
+        "weight": 4.5,
+        "weight_unit": "oz",
+        "image_url": "http://sites.psu.edu/siowfa15/wp-content/uploads/sites/29639/2015/09/04_Apples.jpg",
+        "temperature_control": "none"
       }],
       "metadata": { "note": "I do not want bananas with brown spot PLEASE" }
     }),
@@ -711,6 +723,15 @@ request.post('https://app.pathover.com/api/v1/submitorder', data, function(err, 
 {
     "message": "Order submitted successfully.",
     "success": true
+}
+```
+
+> Or returns JSON response like this if something fails:
+
+```json
+{
+    "status": 400,
+    "reason": "CUSTOMER NAME must exist and be a string"
 }
 ```
 
