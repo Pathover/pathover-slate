@@ -4,6 +4,7 @@ title: Pathover API Reference
 language_tabs:
   - shell: curl
   - javascript: Node.js
+  - php: PHP
 
 toc_footers:
   - <a href='http://pathover.com/'>Return to Pathover.com</a>
@@ -714,6 +715,101 @@ var data = {
 request.post('https://app.pathover.com/api/v1/submitorder', data, function(err, res, body) {
   console.log(body);
 });
+
+```
+
+```php
+<?php
+
+$url = 'https://app.pathover.com/api/v1/submitorder';
+
+// api key
+$api_key = "YOUR_API_KEY";
+
+// customer data
+$customer=array(
+  "name"=>"John Doe",
+  "phone"=>"3012840610",
+  "email"=>"support@pathover.com"
+);
+
+// customer shipping address
+$address=array(
+  "address1"=>"440 N Wolfe Rd",
+  "address2"=>"",
+  "city"=>"Sunnyvale",
+  "state"=>"CA",
+  "postal_code"=>"94085",
+  "country_code"=>"US"
+);
+
+// the order information
+$order=array(
+  "order_no"=>"000",
+  "line_items"=>array(
+    array(
+      "name"=>"Banana",
+      "sku"=>"800",
+      "qty"=>2,
+      "price"=>0.19, // IMPORTANT! this must be a DECIMAL/FLOAT to work! DO NOT USE '4', you must put '4.0' without the single quotes...
+      "upc"=>"57383408",
+      "weight"=>4.0, // IMPORTANT! this must be a DECIMAL/FLOAT to work! DO NOT USE '4', you must put '4.0' without the single quotes...
+      "weight_unit"=>"oz",
+      "image_url"=>"https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3.jpg",
+      "temperature_control"=>"none"
+    ),
+    array(
+      "name"=>"Apple",
+      "sku"=>"899",
+      "qty"=>4,
+      "price"=>0.19, // IMPORTANT! this must be a DECIMAL/FLOAT to work! DO NOT USE '4', you must put '4.0' without the single quotes...
+      "upc"=>"57383408",
+      "weight"=>4.0, // IMPORTANT! this must be a DECIMAL/FLOAT to work! DO NOT USE '4', you must put '4.0' without the single quotes...
+      "weight_unit"=>"oz",
+      "image_url"=>"https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3.jpg",
+      "temperature_control"=>"none",
+    ),
+  ),
+  "metadata"=>array(
+    "note"=>"I do not want bananas with brown spot PLEASE"
+  )
+);
+
+// the type of delivery
+$delivery_type = "scheduled";
+
+// set up curl
+$curl = curl_init();
+
+// make curl request
+curl_setopt_array($curl, array(
+  CURLOPT_URL => "https://staging.pathover.com/api/v1/submitorder",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+
+  // YOU HAVE TO PASS IN A STRING!!!
+  CURLOPT_POSTFIELDS => "apikey=".$api_key."&customer=".json_encode($customer)."&address=".json_encode($address)."&order=".json_encode($order,JSON_PRESERVE_ZERO_FRACTION)."&delivery_type=".$delivery_type,
+  CURLOPT_HTTPHEADER => array(
+    "content-type: application/x-www-form-urlencoded"
+  ),
+));
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}
+
+//close connection
+curl_close($curl);
+
+?>
 
 ```
 
