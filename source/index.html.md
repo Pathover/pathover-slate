@@ -151,7 +151,6 @@ The package object represents a package which will be delivered to the customer.
   "delivery_type": "scheduled",
   "delivered_at": null,
   "master_order_id": 1,
-  "status_id": 19,
   "created_at": "2016/12/16 20:57:56",
   "message_to_customer": null,
   "address_to": {
@@ -183,7 +182,6 @@ Attribute | Type | Description
 id | integer | The unique id number of the location package.
 master_order_id | integer | The unique id number of the [order](#orders).
 location_id | integer | The id of the location which will process this package.
-status_id | integer | The id number of status for reference to `status`
 status | string | The status of the package. Values can be one of `New`, `Initiated`, `Packing`, `Processing`, `Ready`, `In Transit` , `Delivered`, `Complete`, `Canceled`.
 address_to | [address object](#address) | The shipping address of the package.
 geocode | [geocode object](#geocode) | The geocode of the shipping address.
@@ -701,8 +699,7 @@ Order is an object that represents the order from your customers.
 
 Attribute | Type | Description
 --------- | ------- | -----------
-status | object | The object represents the status of the order. Contains status `name` and `id`.
-status_id | integer | The unique id to refer to the status object.
+status | string | The status of the order. Values can be one of `New`, `Processing`, `Complete`, `Canceled`.
 name | string | The name of customer.
 pickup | boolean | Whether the order is for pickup in store.
 created_at | datetime | The timestamp when store location was created.
@@ -1074,17 +1071,13 @@ curl_close($curl);
 ```json
 {
     "master_order": {
-        "status": {
-            "name": "Processing",
-            "id": 11
-        },
+        "status": "Processing",
         "name": "John Doe",
-        "status_id": 11,
         "orders": [
           {
             "master_order_id": 1,
             "order_no": "PO-MJI1W6SZMDBJ",
-            "status_id": 2,
+            "status": "Initiated",
             "package_count": 1,
             "created_at": "2016/12/16 20:57:56",
             "updated_at": "2016/12/16 21:05:26",
@@ -1125,7 +1118,6 @@ curl_close($curl);
             "delivery_type": "scheduled",
             "delivered_at": null,
             "master_order_id": 1,
-            "status_id": 19,
             "created_at": "2016/12/16 20:57:56",
             "message_to_customer": null,
             "address_to": {
